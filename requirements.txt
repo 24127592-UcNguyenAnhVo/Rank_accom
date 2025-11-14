@@ -1,6 +1,0 @@
-# Python requirements for Ranking Algorithm
-
-# No external dependencies needed
-# Only Python standard library modules are used:
-# - math (exponential function)
-# - typing (type hints)
