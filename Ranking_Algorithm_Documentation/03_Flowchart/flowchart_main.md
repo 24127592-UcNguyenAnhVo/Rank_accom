@@ -1,7 +1,9 @@
 # FLOWCHART TỔNG THỂ - Thuật toán Ranking
 
 **Author:** 24127592-UcNguyenAnhVo  
-**Date:** 2025-11-14
+**Created:** 2024-11-14  
+**Last Updated:** 2025-01-17  
+**Version:** 1.1.0
 
 ---
 
@@ -12,7 +14,7 @@ flowchart TD
     Start([🚀 START<br/>rank_results]) --> Input[📥 INPUT<br/>accommodations[]<br/>search_request{}]
     
     Input --> ValidateEmpty{accommodations<br/>empty?}
-    ValidateEmpty -->|Yes| ReturnEmpty↩️ RETURN []]
+    ValidateEmpty -->|Yes| ReturnEmpty[↩️ RETURN []]
     ReturnEmpty --> End
     
     ValidateEmpty -->|No| Extract[📦 EXTRACT DATA<br/>required_tags = search_request.tags<br/>search_type = search_request.type]
@@ -25,9 +27,9 @@ flowchart TD
     
     InitScore --> AddBase[➕ Component 1: Base<br/>score += 5.0]
     
-    AddBase --> CalcProximity[📏 Component 2: Proximity<br/>distance = acc.distance<br/>proximity = 10 × e^-distance/2<br/>score += proximity]
+    AddBase --> CalcProximity[📏 Component 2: Proximity<br/>distance = acc.distance<br/>proximity = 10 × e^(-distance/2)<br/>score += proximity]
     
-    CalcProximity --> CalcTags[🏷️ Component 3: Tag Match<br/>acc_tags = SET acc.tags<br/>required = SET required_tags<br/>matching = acc_tags ∩ required<br/><br/>tag_score = Σ weight tag<br/>tag_score = MIN tag_score, 15<br/>score += tag_score]
+    CalcProximity --> CalcTags[🏷️ Component 3: Tag Match<br/>matching = acc.tags ∩ required<br/>tag_score = Σ weights<br/>capped at 15.0<br/>score += tag_score]
     
     CalcTags --> CheckType{Component 4:<br/>acc.type ==<br/>search_type?}
     
@@ -38,11 +40,11 @@ flowchart TD
     CheckName{Component 5:<br/>acc.name ≠<br/>'Unnamed'?}
     
     CheckName -->|No| AssignScore
-    CheckName -->|Yes| CheckLength{name length<br/>category?}
+    CheckName -->|Yes| CheckLength{name length?}
     
     CheckLength -->|> 20 chars| Add3[➕ score += 3.0]
-    CheckLength -->|> 10 chars| Add2[➕ score += 2.0]
-    CheckLength -->|≤ 10 chars| Add1[➕ score += 1.0]
+    CheckLength -->|10-20 chars| Add2[➕ score += 2.0]
+    CheckLength -->|< 10 chars| Add1[➕ score += 1.0]
     
     Add3 --> AssignScore
     Add2 --> AssignScore
@@ -84,140 +86,88 @@ flowchart TD
 
 ---
 
-## GIẢI THÍCH CÁC KÝ HIỆU
-
-### Shapes:
-
-```
-([...])     = Start/End (Terminal)
-[...]       = Process (Calculation/Operation)
-{...}       = Decision (If/Else)
-```
-
-### Colors:
-
-```
-🟢 Green (#90EE90)  = Start/End/Return
-🟡 Yellow (#FFE4B5) = Initialize
-🔵 Blue (#87CEEB)   = Calculations
-🟠 Orange (#FFA07A) = Decisions
-🟣 Purple (#DDA0DD) = Sorting
-🟢 Light Green (#98FB98) = Final Selection
-```
-
----
-
 ## LUỒNG THỰC THI
 
-### 1. Validation Phase
 ```
-START → Input → Check Empty?
-         ├─ Yes → Return []
-         └─ No  → Continue
-```
-
-### 2. Preparation Phase
-```
-Extract Data → Define Weights
-```
-
-### 3. Scoring Phase (Main Loop)
-```
-FOR EACH accommodation:
-    ├─ Initialize score = 0
-    ├─ Add Base (5.0)
-    ├─ Calculate Proximity (exponential)
-    ├─ Calculate Tag Matches (weighted)
-    ├─ Check Type Match (bonus 5.0)
-    ├─ Check Name Quality (bonus 1-3)
-    └─ Assign final score
-```
-
-### 4. Ranking Phase
-```
-Sort All → Get Top 5 → Assign Ranks (1-5) → Return
+1. Validation:  START → Check Empty → Continue/Return []
+2. Preparation: Extract tags, type → Define weights
+3. Scoring:     FOR EACH acc → Calculate 5 components → Assign score
+4. Ranking:     Sort DESC → Get Top 5 → Assign ranks 1-5 → Return
 ```
 
 ---
 
-## VÍ DỤ TRACE
+## SCORING COMPONENTS
+
+```
+Total Score = Base + Proximity + Tags + Type + Name
+              5.0  + 0-10.0   + 0-15.0 + 0/5 + 0-3
+
+Min: 5.0  | Max: 38.0  | Typical: 15-30
+```
+
+---
+
+## TAG WEIGHTS
+
+| Tag | Weight | Tag | Weight | Tag | Weight |
+|-----|--------|-----|--------|-----|--------|
+| hotel | 3 | pool | 2 | wifi | 1 |
+| beach | 3 | spa | 2 | parking | 1 |
+| resort | 3 | restaurant | 2 | gym | 1 |
+| beachfront | 3 | bar | 2 | others | 1 |
+
+**Max tag score:** 15.0 (capped)
+
+---
+
+## VÍ DỤ
 
 ### Input:
-```
-accommodations = [
-    {name: 'Hotel A', distance: 0.3, tags: ['hotel', 'beach'], type: 'hotel'}
-]
-search_request = {type: 'hotel', tags: ['hotel', 'beach']}
+```json
+{
+  "name": "Sunset Beach Resort",
+  "distance": 1.2,
+  "tags": ["resort", "beach", "pool", "spa"],
+  "type": "resort"
+}
+search_request: {type: "resort", tags: ["beach", "pool"]}
 ```
 
-### Trace:
-
+### Calculation:
 ```
-1. START
-2. Input: 1 accommodation
-3. Empty? No
-4. Extract: required_tags = ['hotel', 'beach'], search_type = 'hotel'
-5. Define weights: hotel=3, beach=3
-6. FOR acc = 'Hotel A':
-   6.1. score = 0
-   6.2. score += 5.0           → score = 5.0
-   6.3. proximity = 10×e^(-0.15) = 8.61
-        score += 8.61          → score = 13.61
-   6.4. matching = {'hotel', 'beach'}
-        tag_score = 3 + 3 = 6
-        score += 6             → score = 19.61
-   6.5. type match? Yes
-        score += 5             → score = 24.61
-   6.6. name = 'Hotel A', length = 7
-        score += 1             → score = 25.61
-   6.7. Assign: acc.score = 25.61
-7. More accs? No
-8. Sort: [Hotel A: 25.61]
-9. Top 5: [Hotel A]
-10. Assign rank: Hotel A.rank = 1
-11. Return: [{name: 'Hotel A', score: 25.61, rank: 1}]
-12. END
+Base:      5.0
+Proximity: 10 × e^(-0.6) = 5.49
+Tags:      beach(3) + pool(2) = 5.0
+Type:      resort == resort → 5.0
+Name:      len(20) → 2.0
+─────────────────────────────
+TOTAL:     22.49 (rank: 1)
 ```
 
 ---
 
-## EDGE CASES XỬ LÝ
+## EDGE CASES
 
-### Case 1: Empty List
-```
-Input: accommodations = []
-Flow: START → Input → Empty? Yes → Return [] → END
-```
+| Case | Behavior |
+|------|----------|
+| Empty list | Return `[]` |
+| Single item | Return 1 item with rank 1 |
+| Tie scores | Stable sort (preserve order) |
+| < 5 items | Return all with ranks |
+| > 5 items | Return top 5 only |
 
-### Case 2: Single Item
-```
-Input: accommodations = [Hotel A]
-Flow: Normal flow → Sort 1 item → Top 1 → Rank = 1
-```
+---
 
-### Case 3: Same Score
+## PERFORMANCE
+
 ```
-Input: 2 hotels with score = 20.0
-Flow: Timsort (stable) → Preserve original order
+Time:  O(n log n)  ← Dominated by Timsort
+Space: O(n)
 ```
 
 ---
 
-## PERFORMANCE METRICS
-
-```
-┌─────────────────────────────────────────────────────────┐
-│ NODE                    │ TIME COMPLEXITY │ EXECUTIONS │
-├─────────────────────────┼─────────────────┼────────────┤
-│ Validation              │ O(1)            │ 1          │
-│ Extract                 │ O(1)            │ 1          │
-│ Define Weights          │ O(1)            │ 1          │
-│ Scoring Loop            │ O(n)            │ n          │
-│   - Each iteration      │ O(m)            │ n          │
-│ Sort                    │ O(n log n)      │ 1          │
-│ Top-5                   │ O(1)            │ 1          │
-│ Rank Assignment         │ O(1)            │ 1          │
-└─────────────────────────────────────────────────────────┘
-
-Total: O(n log n)
-```
+**See also:**  
+- [Components Detail](./flowchart_components.md)  
+- [Code Comparison](./flowchart_comparison.md)
