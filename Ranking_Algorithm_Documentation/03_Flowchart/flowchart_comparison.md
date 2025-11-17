@@ -7,13 +7,6 @@
 
 ---
 
-## 📚 LIÊN KẾT NHANH
-
-- **🗺️ Main Flowchart:** [flowchart_main.md](./flowchart_main.md)  
-- **🔍 Component Details:** [flowchart_components.md](./flowchart_components.md)
-
----
-
 ## MỤC ĐÍCH
 
 Chứng minh **code implementation khớp 100%** với flowchart thiết kế.
@@ -114,9 +107,11 @@ TOTAL:     22.49 → rank 1
 
 ---
 
-**Related Documentation:**  
-- **Main Flowchart:** [flowchart_main.md](./flowchart_main.md)  
-- **Component Details:** [flowchart_components.md](./flowchart_components.md)
+**Related documents:**
+- 🗺️ [Main Flowchart](./flowchart_main.md)
+- 🔍 [Component Details](./flowchart_components.md)
+
+---
 
 **Last Updated:** 2025-01-17  
 **Maintained By:** 24127592-UcNguyenAnhVo
