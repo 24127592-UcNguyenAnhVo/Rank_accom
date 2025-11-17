@@ -1,8 +1,9 @@
 # FLOWCHART TỔNG QUÁT - Thuật toán Ranking
 
 **Author:** 24127592-UcNguyenAnhVo  
-**Version:** 2.0.0 (Overview)  
-**Updated:** 2025-01-17
+**Created:** 2025-01-17  
+**Last Updated:** 2025-01-17  
+**Version:** 2.0.0
 
 ---
 
@@ -96,8 +97,11 @@ TagMatch:  tổng trọng số tags khớp (có giới hạn trên)
 
 ---
 
-**Chi tiết implementation:** Xem [flowchart_main.md](./flowchart_main.md) và [flowchart_components.md](./flowchart_components.md)
+**Related documents:**
+- 🔍 [Main Flowchart](./flowchart_main.md)
+- 🧩 [Component Details](./flowchart_components.md)
 
 ---
 
+**Last Updated:** 2025-01-17  
 **Maintained By:** 24127592-UcNguyenAnhVo
