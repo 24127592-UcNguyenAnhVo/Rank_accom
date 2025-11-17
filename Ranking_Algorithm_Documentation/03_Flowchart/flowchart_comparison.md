@@ -7,6 +7,19 @@
 
 ---
 
+## 📚 LIÊN KẾT NHANH
+
+- **🗺️ Main Flowchart:** [flowchart_main.md](./flowchart_main.md)  
+- **🔍 Component Details:** [flowchart_components.md](./flowchart_components.md)
+
+---
+
+## MỤC ĐÍCH
+
+Chứng minh **code implementation khớp 100%** với flowchart thiết kế.
+
+---
+
 ## BẢNG SO SÁNH
 
 | Flowchart | Code | ✅ |
@@ -36,7 +49,7 @@
 
 ---
 
-## VÍ DỤ
+## VÍ DỤ TRACE
 
 ### Input:
 ```json
@@ -60,26 +73,50 @@ Name:      len(20) → 2.0
 TOTAL:     22.49 → rank 1
 ```
 
+### Output:
+```json
+[{
+  "name": "Sunset Beach Resort",
+  "distance": 1.2,
+  "tags": ["resort", "beach", "pool", "spa"],
+  "type": "resort",
+  "score": 22.49,
+  "rank": 1
+}]
+```
+
+✅ **Khớp 100% với flowchart prediction!**
+
 ---
 
 ## EDGE CASES
 
-| Case | Match |
-|------|-------|
-| Empty list | ✅ |
-| Single item | ✅ |
-| Tie scores (stable sort) | ✅ |
-| < 5 items | ✅ |
-| > 5 items | ✅ |
+| Case | Flowchart | Code | Match |
+|------|-----------|------|-------|
+| Empty list | Return `[]` | `return []` | ✅ |
+| Single item | Rank 1 | `rank = 1` | ✅ |
+| Tie scores | Stable sort | Timsort stable | ✅ |
+| < 5 items | Return all | `[:5]` returns all | ✅ |
+| > 5 items | Top 5 only | `[:5]` slices | ✅ |
 
 ---
 
 ## KẾT LUẬN
 
 ```
-Code ✅ Flowchart
-Match: 100%
-All edge cases: ✅
+╔═══════════════════════════════════════╗
+║  CODE ✅ FLOWCHART                    ║
+║  Match rate: 100% (16/16 steps)      ║
+║  Edge cases: All verified            ║
+║  Logic: Identical                    ║
+╚═══════════════════════════════════════╝
 ```
 
-**Last Updated:** 2025-01-17
+---
+
+**Related Documentation:**  
+- **Main Flowchart:** [flowchart_main.md](./flowchart_main.md)  
+- **Component Details:** [flowchart_components.md](./flowchart_components.md)
+
+**Last Updated:** 2025-01-17  
+**Maintained By:** 24127592-UcNguyenAnhVo
