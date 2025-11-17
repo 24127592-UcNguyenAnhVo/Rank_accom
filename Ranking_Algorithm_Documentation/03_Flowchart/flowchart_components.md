@@ -280,9 +280,11 @@ Scoring:
 
 ---
 
-**Related:**  
-- [Main Flowchart](./flowchart_main.md)  
-- [Code Comparison](./flowchart_comparison.md)
+**Related documents:**
+- 🗺️ [Main Flowchart](./flowchart_main.md)
+- ✅ [Code Comparison](./flowchart_comparison.md)
+
+---
 
 **Last Updated:** 2025-01-17  
 **Maintained By:** 24127592-UcNguyenAnhVo
