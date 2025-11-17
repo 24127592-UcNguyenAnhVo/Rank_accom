@@ -211,9 +211,11 @@ RANK:                         1
 
 ---
 
-**Related documents:**  
-- [Component Details](./flowchart_components.md)  
-- [Code Comparison](./flowchart_comparison.md)
+**Related documents:**
+- 🔍 [Component Details](./flowchart_components.md)
+- ✅ [Code Comparison](./flowchart_comparison.md)
+
+---
 
 **Last Updated:** 2025-01-17  
 **Maintained By:** 24127592-UcNguyenAnhVo
